@@ -19,9 +19,8 @@ public class RolesService {
         return roleRepository.findAll();
     }
 
-
-    public void saveRole(Role role) {
-        roleRepository.save(role);
-    }
+//    public void saveRole(Role role) {
+//        roleRepository.save(role);
+//    }
 
 }

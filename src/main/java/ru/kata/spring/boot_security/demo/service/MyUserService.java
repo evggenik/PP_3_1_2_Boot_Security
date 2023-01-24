@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class MyUserService {
+public class MyUserService   {
 //public class MyUserService implements UserDetailsService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
@@ -34,7 +34,8 @@ public class MyUserService {
     }
 
     public void saveUser(UserEntity userEntity) {
-        userEntity.setUserName(userEntity.getUsername());
+        // здесь наверно можно сделать проверку на Duplicate entry, если такой юзерь уже есть в бд
+        userEntity.setUsername(userEntity.getUsername());
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userRepository.save(userEntity);
     }
@@ -58,6 +59,7 @@ public class MyUserService {
     public List<Role> getRoles() {
         return roleRepository.findAll();
     }
+
 
 }
 

@@ -1,8 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
-//import lombok.AllArgsConstructor;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +17,6 @@ import java.util.*;
 public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id")
     private Long id;
     @Column(name = "user_name", unique = true, nullable = false)
     private String username;
@@ -36,6 +34,8 @@ public class UserEntity implements UserDetails {
                     name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
+
+
 
     public List<Role> getRoles() {
         return roles;
@@ -63,7 +63,7 @@ public class UserEntity implements UserDetails {
     }
 
 
-    public void setUserName(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
