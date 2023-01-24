@@ -38,14 +38,15 @@ public class AdminController {
     @GetMapping("/admin/add")
     public String add(Model model) {
         model.addAttribute("user", new UserEntity());
-        model.addAttribute("users_roles", rolesService.findAllRoles());
-        System.out.println(rolesService.findAllRoles());
+        model.addAttribute("users_roles", rolesService.getAllRoles());
+        System.out.println(rolesService.getAllRoles());
         return "add";
     }
 
     @PostMapping("/admin/add")
-    public String addUser(@ModelAttribute UserEntity user) {
+    public String addUser(@ModelAttribute("user") UserEntity user) {
         user.setRoles(user.getRoles());
+
         myUserService.saveUser(user);
         return "redirect:/admin";
     }

@@ -1,21 +1,20 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.model.Role;
+import org.springframework.transaction.annotation.Transactional;
+
 import ru.kata.spring.boot_security.demo.model.UserEntity;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import java.util.Optional;
+
 
 // my own security
 
@@ -29,16 +28,24 @@ public class MyUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+//    private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
+//        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+//    }
+
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        return new User(user.getUserName(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+        Optional<UserEntity> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isEmpty()) {
+            throw new UsernameNotFoundException("Username not found");
+        }
+        UserEntity user = userOpt.get();
+//        GrantedAuthority authority = new SimpleGrantedAuthority(compUser.getAuthority());
+        UserDetails userDetails = (UserDetails)new User(user.getUsername(),
+                user.getPassword(), user.getAuthorities());
+        return userDetails;
 
-//        return userRepository.findByUserName(username);
+//        UserEntity user = userRepository.findByUserName(username);
+//        return new User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
-
-    private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-    }
-
 }

@@ -25,13 +25,13 @@
         <th:block th:each="userEntity : ${users}">
             <tr>
                 <td th:text="${userEntity.id}">...</td>
-                <td th:text="${userEntity.userName}">...</td>
+                <td th:text="${userEntity.getUsername()}">...</td>
                 <td th:text="${userEntity.firstName}">...</td>
                 <td th:text="${userEntity.lastName}">...</td>
                 <td th:text="${userEntity.password}">...</td>
                 <td th:text="${userEntity.email}">...</td>
                 <td>
-                <th:block th:each="role : ${userEntity.roles}">
+                <th:block th:each="role : ${userEntity.getAuthorities()}">
                     <span th:text="${role.name}"></span>
                 </th:block>
                 </td>
